@@ -12,13 +12,15 @@ class ApiService {
   HttpClient client = HttpClient();
   final storage = new FlutterSecureStorage();
 
-  Future < bool > autoApiLogin() async {
+  Future<bool> autoApiLogin() async {
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
     // check if a token is saved.
-    if (id != null && hash != null){
-      Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_main');
-      String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+    if (id != null && hash != null) {
+      Uri url =
+          Uri.parse('https://www.all-round-events.be/api.php?action=get_main');
+      String json =
+          '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
       final request = await client.postUrl(url);
       request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
       request.write(json);
@@ -29,8 +31,7 @@ class ApiService {
         var json_respone = jsonDecode(body);
         if (json_respone["status"] == 200) {
           return true;
-        }
-        else{
+        } else {
           return false;
         }
 
@@ -39,16 +40,13 @@ class ApiService {
         // credentials found on device but they are not valid, log ins needed
         return false;
       }
-    }
-    else{
+    } else {
       // no credentials are stored on the device, login is needed
       return false;
     }
   }
 
-  Future < List > ApiLogin(List login) async {
-
-
+  Future<List> ApiLogin(List login) async {
     Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=login');
     String json = '{"email": "' + login[0] + '", "pass": "' + login[1] + '"}';
     final request = await client.postUrl(url);
@@ -69,18 +67,51 @@ class ApiService {
         return ["", "Uw logingegevens waren niet correct, probeer opnieuw"];
       }
     } else {
-      return ["", "Er kon geen connectie gemaakt worden, bent u verbonden met het internet?"];
+      return [
+        "",
+        "Er kon geen connectie gemaakt worden, bent u verbonden met het internet?"
+      ];
     }
   }
 
-  Future <dynamic> getUser_info() async {
+  Future<List> PassReset(String email) async {
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=reset_pass');
+    String json = '{"email": "' + email + '"}';
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    request.write(json);
+    final response = await request.close();
+    int statusCode = response.statusCode;
+  }
 
+  Future<List> UserInit(Map userData) async {
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=new_user');
+    Object json = {
+      "pass": userData["pass"],
+      "email": userData["email"],
+      "activation_code": userData["activation_code"]
+    };
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    request.write(jsonEncode(json));
+    final response = await request.close();
+    int statusCode = response.statusCode;
+    if(statusCode == 200){
+      final body = await response.transform(utf8.decoder).join();
+      var json_respone = jsonDecode(body);
+      return json_respone;
+    }
+  }
+
+  Future<dynamic> getUser_info() async {
     // write from secure storage
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
 
-    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_main');
-    String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+    Uri url =
+        Uri.parse('https://www.all-round-events.be/api.php?action=get_main');
+    String json =
+        '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(json);
@@ -91,19 +122,19 @@ class ApiService {
       var json_respone = jsonDecode(body);
       return json_respone;
       print(json_respone);
-    } else {
-
-    }
+    } else {}
   }
 
-  Future <dynamic> pushUser_info(Map userData) async {
-
+  Future<dynamic> pushUser_info(Map userData) async {
     // write from secure storage
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
 
-    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=insert_main');
-    Object json = {"id": id.toString() , "hash": hash.toString(),
+    Uri url =
+        Uri.parse('https://www.all-round-events.be/api.php?action=insert_main');
+    Object json = {
+      "id": id.toString(),
+      "hash": hash.toString(),
       "name": userData["name"],
       "date_of_birth": userData["birth"],
       "Gender": userData["gender"],
@@ -127,9 +158,6 @@ class ApiService {
     if (statusCode == 200) {
       var json_respone = jsonDecode(body);
       return json_respone;
-      print(json_respone);
-    } else {
-
-    }
+    } else {}
   }
 }

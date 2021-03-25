@@ -35,7 +35,7 @@ class userPage extends State<UserDemo> {
           myNathionality_controller.text = user["nationality"];
           date_controller.text = user["date_of_birth"];
           mytext_controller.text = user["text"];
-          if (user["date_of_birth"] == "1"){
+          if (user["date_of_birth"] == "1") {
             String gender = "Vrouw";
           }
 
@@ -43,7 +43,7 @@ class userPage extends State<UserDemo> {
         });
       });
     }
-    DateTime selectedDate = DateTime.utc(2000,1,1);
+    DateTime selectedDate = DateTime.utc(2000, 1, 1);
     Future<void> _selectDate(BuildContext context) async {
       final DateTime picked = await showDatePicker(
           context: context,
@@ -54,13 +54,11 @@ class userPage extends State<UserDemo> {
         setState(() {
           selectedDate = picked;
           date_controller.text = picked.toString();
-
         });
     }
 
     String dropdownValue = 'Man';
     return Scaffold(
-
       appBar: AppBar(
         title: Text("Gebruiker"),
       ),
@@ -165,7 +163,7 @@ class userPage extends State<UserDemo> {
                 left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextField(
               controller: date_controller,
-                readOnly: true,
+              readOnly: true,
               onTap: () {
                 _selectDate(context);
               },
@@ -178,71 +176,69 @@ class userPage extends State<UserDemo> {
                   hintText: ''),
             ),
           ),
-            Padding(
-
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 0),
-
-          child: InputDecorator(
-            decoration: InputDecoration(
-              filled: true,
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            child: InputDecorator(
+              decoration: InputDecoration(
+                filled: true,
                 fillColor: Colors.white,
-                errorStyle: TextStyle(color: Colors.black, fontSize: 16.0, backgroundColor: Colors.white),
+                errorStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                    backgroundColor: Colors.white),
                 hintText: 'aub selecteer geslacht',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-            ),
-
-            isEmpty: false,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-
-                value: gender,
-                isDense: true,
-                onChanged: (String newValue) {
-                  setState(() {
-                     gender = newValue;
-
-                  });
-                },
-                items: ["Man", "Vrouw"].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+              ),
+              isEmpty: false,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: gender,
+                  isDense: true,
+                  onChanged: (String newValue) {
+                    setState(() {
+                      gender = newValue;
+                    });
+                  },
+                  items: ["Man", "Vrouw"].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            child: TextField(
+              controller: mysocialNR_controller,
+              decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(),
+                  labelText: 'Rijksregister nr',
+                  labelStyle: TextStyle(color: Colors.black),
+                  hintText: ''),
             ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 0),
-                child: TextField(
-                  controller: mysocialNR_controller,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(),
-                      labelText: 'Rijksregister nr',
-                      labelStyle: TextStyle(color: Colors.black),
-                      hintText: ''),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 0),
-                child: TextField(
-                  controller: mytext_controller,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(),
-                      labelText: 'Persoonlijke text',
-                      labelStyle: TextStyle(color: Colors.black),
-                      hintText: ''),
-                ),
-              ),
-
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            child: TextField(
+              controller: mytext_controller,
+              decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(),
+                  labelText: 'Persoonlijke text',
+                  labelStyle: TextStyle(color: Colors.black),
+                  hintText: ''),
+            ),
+          ),
           Container(
             height: 50,
             width: MediaQuery.of(context).size.width * 0.80,
@@ -254,18 +250,20 @@ class userPage extends State<UserDemo> {
               onPressed: () {
                 ApiService api = new ApiService();
                 String gender_int = "0";
-                if (gender == "Vrouw"){
+                if (gender == "Vrouw") {
                   gender_int = "1";
                 }
-                api.pushUser_info({"name": myName_controller.text,
+                api.pushUser_info({
+                  "name": myName_controller.text,
                   "address": myaddres_controller.text,
                   "bankNr": myrekening_controller.text,
                   "phone": mytelephone_controller.text,
                   "country": myNathionality_controller.text,
                   "birth": date_controller.text,
-                  "gender":gender_int,
-                "text": mytext_controller.text,
-                "socialNR": mysocialNR_controller.text});
+                  "gender": gender_int,
+                  "text": mytext_controller.text,
+                  "socialNR": mysocialNR_controller.text
+                });
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => _buildPopupDialog(context),
@@ -282,6 +280,7 @@ class userPage extends State<UserDemo> {
     );
   }
 }
+
 Widget _buildPopupDialog(BuildContext context) {
   return new AlertDialog(
     title: const Text('Opgeslagen'),
@@ -298,7 +297,7 @@ Widget _buildPopupDialog(BuildContext context) {
           Navigator.of(context).pop();
         },
         textColor: Theme.of(context).primaryColor,
-        child: const Text('Close'),
+        child: const Text('Sluiten'),
       ),
     ],
   );
