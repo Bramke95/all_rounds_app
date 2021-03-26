@@ -84,7 +84,7 @@ class ApiService {
     int statusCode = response.statusCode;
   }
 
-  Future<List> UserInit(Map userData) async {
+  Future<dynamic> UserInit(Map userData) async {
     Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=new_user');
     Object json = {
       "pass": userData["pass"],
@@ -99,6 +99,8 @@ class ApiService {
     if(statusCode == 200){
       final body = await response.transform(utf8.decoder).join();
       var json_respone = jsonDecode(body);
+      await storage.write(key: "hash", value: json_respone["hash"]);
+      await storage.write(key: "id", value: json_respone["id"]);
       return json_respone;
     }
   }

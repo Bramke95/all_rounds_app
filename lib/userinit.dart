@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'Api.dart';
 import 'login.dart';
+import 'user.dart';
 
 
 final myemail_controller = TextEditingController();
 final mypassowrdController = TextEditingController();
 final mycode_controller = TextEditingController();
-
+String error_text = "";
 class UserInitDemo extends StatefulWidget {
   @override
   userInit createState() => userInit();
@@ -30,6 +31,16 @@ class userInit extends State<UserInitDemo> {
         SingleChildScrollView(
             child: Column(children: [
               Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    "$error_text",
+                    style: TextStyle(
+                        background: Paint()
+                          ..color = Colors.red
+                          ..strokeWidth = 25
+                          ..style = PaintingStyle.stroke),
+                  )),
+              Padding(
                 padding: const EdgeInsets.only(
                     left: 15.0, right: 15.0, top: 15, bottom: 0),
                 child: TextField(
@@ -48,6 +59,7 @@ class userInit extends State<UserInitDemo> {
                     left: 15.0, right: 15.0, top: 15, bottom: 0),
                 child: TextField(
                   controller: mypassowrdController,
+                  obscureText: true,
                   decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
@@ -81,14 +93,34 @@ class userInit extends State<UserInitDemo> {
                 child: FlatButton(
                   onPressed: () {
                     ApiService api = new ApiService();
-                    api.UserInit({"pass" : mypassowrdController.text, "email": mypassowrdController.text, "activation_code": mycode_controller.text});
-
-                    showDialog(
-
+                    api.UserInit({"pass" : mypassowrdController.text, "email": myemail_controller.text, "activation_code": mycode_controller.text}).then((value){
+                      if (value["status"] == 409){
+                        setState(() {
+                          error_text="Toegangscode was niet geldig.";
+                        });
+                      }
+                      else if (value["status"] == 480){
+                        setState(() {
+                        error_text="Email al in gebruik, gelieve in te loggen.";
+                        });
+                      }
+                      else if (value["status"] == 481){
+                        setState(() {
+                        error_text="Wachtwoord te kort!";
+                        });
+                      }
+                      else {
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) => _buildPopupDialog(context),
                     ).then((value) => {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginDemo()))
+                          MaterialPageRoute(builder: (context) => UserDemo()))
                     });
+                          }
+                    });
+
+
                   },
                   child: Text(
                     'Inschrijven',
@@ -100,4 +132,26 @@ class userInit extends State<UserInitDemo> {
       ]),
     );
   }
+}
+
+Widget _buildPopupDialog(BuildContext context) {
+  return new AlertDialog(
+    title: const Text('Doorgaan'),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("Uw acound is aangemaakt, vul uw gegevens verder aan"),
+      ],
+    ),
+    actions: <Widget>[
+      new FlatButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        textColor: Theme.of(context).primaryColor,
+        child: const Text('Doorgaan'),
+      ),
+    ],
+  );
 }
