@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Api.dart';
+import 'festivals.dart';
 import 'package:flutter/services.dart';
 
 String user_name = "";
@@ -80,7 +81,9 @@ class userPage extends State<UserDemo> {
             margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
             child: FlatButton(
               onPressed: () {
-                ApiService api = new ApiService();
+
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => festivalDemo()));
               },
               child: Text(
                 'Inschrijvingen',

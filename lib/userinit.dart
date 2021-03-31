@@ -119,8 +119,6 @@ class userInit extends State<UserInitDemo> {
                     });
                           }
                     });
-
-
                   },
                   child: Text(
                     'Inschrijven',
