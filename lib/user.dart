@@ -72,25 +72,7 @@ class userPage extends State<UserDemo> {
         ),
         SingleChildScrollView(
             child: Column(children: [
-          Container(
-            height: 50,
-            width: MediaQuery.of(context).size.width * 0.80,
-            decoration: BoxDecoration(
-                color: Colors.lightGreen,
-                borderRadius: BorderRadius.circular(20)),
-            margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-            child: FlatButton(
-              onPressed: () {
 
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => festivalDemo()));
-              },
-              child: Text(
-                'Inschrijvingen',
-                style: TextStyle(color: Colors.white, fontSize: 25),
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(
                 left: 15.0, right: 15.0, top: 15, bottom: 0),

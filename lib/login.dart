@@ -3,6 +3,7 @@ import 'user.dart';
 import 'Api.dart';
 import 'passforget.dart';
 import 'userinit.dart';
+import 'mainMenu.dart';
 
 class LoginDemo extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _LoginDemoState extends State<LoginDemo> {
       login.autoApiLogin().then((bool is_auth) {
         if (is_auth) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => UserDemo()));
+              context, MaterialPageRoute(builder: (context) => UserMenu()));
         }
         // nothing needs to happen// token is set, move to other pa
       });
@@ -132,7 +133,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     } else {
                       // token is set, move to other page
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => UserDemo()));
+                          MaterialPageRoute(builder: (context) => UserMenu()));
                     }
                   });
                 },
@@ -162,7 +163,6 @@ class _LoginDemoState extends State<LoginDemo> {
             SizedBox(
               height: 130,
             ),
-            Text('New User? Create Account')
           ],
         ),
       ),

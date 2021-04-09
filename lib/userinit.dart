@@ -19,7 +19,7 @@ class userInit extends State<UserInitDemo> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Wachtwoord vergeten"),
+        title: Text("Registeren"),
       ),
       body: Stack(children: <Widget>[
         new Container(
@@ -81,6 +81,15 @@ class userInit extends State<UserInitDemo> {
                       labelText: 'toegangscode',
                       labelStyle: TextStyle(color: Colors.black),
                       hintText: ''),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 15, bottom: 0),
+                child: Text(
+
+                    "Vraag aan je vriend of kennis die werkt bij all-rounds om deze toegangscode, ken je niemand die werkt bij all-rounds? Stuur dan een mailtje(zie contanct) en log ons uit waarom jij bij ons team hoort!",
+                      style: TextStyle(backgroundColor: Colors.greenAccent, decorationThickness: 5.0, fontSize: 16),
                 ),
               ),
               Container(

@@ -17,10 +17,8 @@ class ApiService {
     String hash = await storage.read(key: "hash");
     // check if a token is saved.
     if (id != null && hash != null) {
-      Uri url =
-          Uri.parse('https://www.all-round-events.be/api.php?action=get_main');
-      String json =
-          '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+      Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_main');
+      String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
       final request = await client.postUrl(url);
       request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
       request.write(json);
@@ -67,10 +65,7 @@ class ApiService {
         return ["", "Uw logingegevens waren niet correct, probeer opnieuw"];
       }
     } else {
-      return [
-        "",
-        "Er kon geen connectie gemaakt worden, bent u verbonden met het internet?"
-      ];
+      return ["", "Er kon geen connectie gemaakt worden, bent u verbonden met het internet?"];
     }
   }
 
@@ -86,17 +81,13 @@ class ApiService {
 
   Future<dynamic> UserInit(Map userData) async {
     Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=new_user');
-    Object json = {
-      "pass": userData["pass"],
-      "email": userData["email"],
-      "activation_code": userData["activation_code"]
-    };
+    Object json = {"pass": userData["pass"], "email": userData["email"], "activation_code": userData["activation_code"]};
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(jsonEncode(json));
     final response = await request.close();
     int statusCode = response.statusCode;
-    if(statusCode == 200){
+    if (statusCode == 200) {
       final body = await response.transform(utf8.decoder).join();
       var json_respone = jsonDecode(body);
       await storage.write(key: "hash", value: json_respone["hash"]);
@@ -110,10 +101,8 @@ class ApiService {
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
 
-    Uri url =
-        Uri.parse('https://www.all-round-events.be/api.php?action=get_main');
-    String json =
-        '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_main');
+    String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(json);
@@ -132,10 +121,8 @@ class ApiService {
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
 
-    Uri url =
-    Uri.parse('https://www.all-round-events.be/api.php?action=get_festivals');
-    String json =
-        '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_festivals');
+    String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(json);
@@ -154,10 +141,8 @@ class ApiService {
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
 
-    Uri url =
-    Uri.parse('https://www.all-round-events.be/api.php?action=get_shifts');
-    String json =
-        '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_shifts');
+    String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(json);
@@ -176,8 +161,7 @@ class ApiService {
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
     Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_shift_days');
-    String json =
-        '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+    String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(json);
@@ -196,8 +180,7 @@ class ApiService {
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
     Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=shift_work_days');
-    String json =
-        '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+    String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(json);
@@ -205,10 +188,54 @@ class ApiService {
     int statusCode = response.statusCode;
     if (statusCode == 200) {
       final body = await response.transform(utf8.decoder).join();
-      var json_respone = jsonDecode(body);
+      if(jsonDecode(body).length < 1){
+        return [];
+      }
+      List json_respone = jsonDecode(body);
       return json_respone;
       print(json_respone);
     } else {}
+  }
+
+  Future<bool> user_subscribe(shift) async {
+    // write from secure storage
+    String id = await storage.read(key: "id");
+    String hash = await storage.read(key: "hash");
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=user_subscribe');
+    Object json = {"id": id, "hash": hash, "Id_Users": id, "idshifts": shift};
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    print(json);
+    request.write(jsonEncode(json));
+    final response = await request.close();
+    int statusCode = response.statusCode;
+    if (statusCode == 200) {
+      final body = await response.transform(utf8.decoder).join();
+      print(body);
+      return true;
+
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> user_unsubscribe(shift) async {
+    // write from secure storage
+    String id = await storage.read(key: "id");
+    String hash = await storage.read(key: "hash");
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=user_unsubscribe');
+    Object json = {"id": id, "hash": hash, "Id_Users": id, "idshifts": shift};
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    request.write(jsonEncode(json));
+    final response = await request.close();
+    int statusCode = response.statusCode;
+    if (statusCode == 200) {
+      return true;
+
+    } else {
+      return false;
+    }
   }
 
 
@@ -217,8 +244,7 @@ class ApiService {
     String id = await storage.read(key: "id");
     String hash = await storage.read(key: "hash");
 
-    Uri url =
-        Uri.parse('https://www.all-round-events.be/api.php?action=insert_main');
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=insert_main');
     Object json = {
       "id": id.toString(),
       "hash": hash.toString(),
