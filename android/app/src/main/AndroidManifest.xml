@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="all_round_events">
+    package="com.rounds.all_round_events">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="all_round_events"
+        android:label="com.rounds.all_round_events"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".MainActivity"
+            android:name="com.rounds.all_round_events.MainActivity"
             android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"

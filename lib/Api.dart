@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:all_round_events/login.dart';
 
 class ApiService {
   // set up POST request arguments
@@ -33,7 +29,6 @@ class ApiService {
           return false;
         }
 
-        return true;
       } else {
         // credentials found on device but they are not valid, log ins needed
         return false;
@@ -69,7 +64,7 @@ class ApiService {
     }
   }
 
-  Future<List> PassReset(String email) async {
+  Future<void> PassReset(String email) async {
     Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=reset_pass');
     String json = '{"email": "' + email + '"}';
     final request = await client.postUrl(url);
@@ -77,6 +72,9 @@ class ApiService {
     request.write(json);
     final response = await request.close();
     int statusCode = response.statusCode;
+    if(statusCode != 200) {
+      print("error");
+    }
   }
 
   Future<dynamic> UserInit(Map userData) async {
@@ -112,7 +110,6 @@ class ApiService {
       final body = await response.transform(utf8.decoder).join();
       var json_respone = jsonDecode(body);
       return json_respone;
-      print(json_respone);
     } else {}
   }
 
@@ -132,8 +129,9 @@ class ApiService {
       final body = await response.transform(utf8.decoder).join();
       var json_respone = jsonDecode(body);
       return json_respone;
-      print(json_respone);
-    } else {}
+    } else {
+      return [];
+    }
   }
 
   Future<List> getshifts() async {
@@ -152,7 +150,6 @@ class ApiService {
       final body = await response.transform(utf8.decoder).join();
       var json_respone = jsonDecode(body);
       return json_respone;
-      print(json_respone);
     } else {}
   }
 
@@ -172,7 +169,9 @@ class ApiService {
       var json_respone = jsonDecode(body);
       return json_respone;
       print(json_respone);
-    } else {}
+    } else {
+      return [];
+    }
   }
 
   Future<List> GetShiftWorkDays() async {
@@ -193,8 +192,9 @@ class ApiService {
       }
       List json_respone = jsonDecode(body);
       return json_respone;
-      print(json_respone);
-    } else {}
+    } else {
+      return [];
+    }
   }
 
   Future<bool> user_subscribe(shift) async {

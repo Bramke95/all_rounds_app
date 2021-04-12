@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'Api.dart';
-import 'festivals.dart';
-import 'package:flutter/services.dart';
 
 String user_name = "";
 final myName_controller = TextEditingController();

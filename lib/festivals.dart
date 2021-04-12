@@ -2,9 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'Api.dart';
-import 'login.dart';
-import 'user.dart';
-
 List festivals = [];
 List shifts = [];
 List shiftDays = [];

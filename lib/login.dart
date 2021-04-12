@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'user.dart';
 import 'Api.dart';
 import 'passforget.dart';
 import 'userinit.dart';
@@ -86,13 +85,13 @@ class _LoginDemoState extends State<LoginDemo> {
               ),
             ),
             Container(
-              height: 20,
+              height: 25,
               width: MediaQuery.of(context).size.width * 0.45,
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               decoration: BoxDecoration(
                   color: Colors.lightGreen,
                   borderRadius: BorderRadius.circular(10)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => passforgetDemo()));
@@ -101,14 +100,8 @@ class _LoginDemoState extends State<LoginDemo> {
                     style: TextStyle(
                         backgroundColor: Colors.lightGreen,
                         color: Colors.red,
-                        fontSize: 12,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: Offset(20.0, 20.0),
-                            blurRadius: 2.0,
-                            color: Color.fromARGB(0, 0, 0, 0),
-                          ),
-                        ])),
+                        fontSize: 10)
+                ),
               ),
             ),
             Container(
@@ -117,7 +110,7 @@ class _LoginDemoState extends State<LoginDemo> {
               decoration: BoxDecoration(
                   color: Colors.lightGreen,
                   borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () {
                   setState(() {
                     error_text = "";
@@ -149,7 +142,7 @@ class _LoginDemoState extends State<LoginDemo> {
               margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               decoration: BoxDecoration(
                   color: Colors.black, borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => UserInitDemo()));
