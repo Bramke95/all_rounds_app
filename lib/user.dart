@@ -12,6 +12,7 @@ final mytext_controller = TextEditingController();
 final mysocialNR_controller = TextEditingController();
 bool isSet = false;
 String gender = "Man";
+String size = "M";
 
 class UserDemo extends StatefulWidget {
   @override
@@ -37,6 +38,7 @@ class userPage extends State<UserDemo> {
           if (user["date_of_birth"] == "1") {
             String gender = "Vrouw";
           }
+          size = user["size"];
 
           isSet = true;
         });
@@ -194,6 +196,41 @@ class userPage extends State<UserDemo> {
               ),
             ),
           ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 15, bottom: 0),
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        backgroundColor: Colors.white),
+                    hintText: 'T shift maat',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: size,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        setState(() {
+                          size = newValue;
+                        });
+                      },
+                      items: ["XXS", "XS","S", "M","L", "XL", "XXL"].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
           Padding(
             padding: const EdgeInsets.only(
                 left: 15.0, right: 15.0, top: 15, bottom: 0),
@@ -244,6 +281,7 @@ class userPage extends State<UserDemo> {
                   "country": myNathionality_controller.text,
                   "birth": date_controller.text,
                   "gender": gender_int,
+                  "size": size,
                   "text": mytext_controller.text,
                   "socialNR": mysocialNR_controller.text
                 });

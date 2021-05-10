@@ -22,10 +22,8 @@ class _LoginDemoState extends State<LoginDemo> {
       ApiService login = new ApiService();
       login.autoApiLogin().then((bool is_auth) {
         if (is_auth) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => UserMenu()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => UserMenu()));
         }
-        // nothing needs to happen// token is set, move to other pa
       });
       autolog_try = true;
     }

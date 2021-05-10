@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'mainMenu.dart';
 import 'package:flutter/material.dart';
 import 'Api.dart';
 List festivals = [];
@@ -8,10 +8,16 @@ List shiftDays = [];
 List workDays = [];
 bool isSet = false;
 ApiService api = new ApiService();
-
+Timer timer;
 class festivalDemo extends StatefulWidget {
   @override
   userInit createState() => userInit();
+}
+void back(context){
+  timer.cancel();
+  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMenu()));
+  isSet = false;
+
 }
 
 class userInit extends State<festivalDemo> {
@@ -28,6 +34,14 @@ class userInit extends State<festivalDemo> {
                         api.GetShiftWorkDays().then((value4) => {
                               setState(() {
                                 festivals = value1;
+                                if (festivals.length < 1){
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) => _buildPopupDialog(context),
+                                  ).then((value) => {
+                                    back(context)
+                                  });
+                                }
                                 shifts = value2;
                                 shiftDays = value3;
                                 workDays = value4;
@@ -64,13 +78,21 @@ class userInit extends State<festivalDemo> {
     }
     if(!isSet){
       update();
-      Timer timer = new Timer(new Duration(seconds: 60), () {
+      timer = new Timer(new Duration(seconds: 60), () {
         update();
       });
       isSet = true;
     }
-
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () {
+          //trigger leaving and use own data
+          Navigator.pop(context, false);
+          timer.cancel();
+          isSet = false;
+          //we need to return a future
+          return Future.value(false);
+        },
+    child: Scaffold(
       appBar: AppBar(
         title: Text("Inschrijvingen"),
       ),
@@ -84,7 +106,7 @@ class userInit extends State<festivalDemo> {
           itemCount: festivals.length,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int blockIdx) {
-            //
+
             return new Column(
               children: [
                 Container(
@@ -215,7 +237,7 @@ class userInit extends State<festivalDemo> {
           },
         ))
       ]),
-    );
+    ));
   }
 }
 
@@ -273,4 +295,26 @@ List id_to_status(id, is_already_subscribed, is_full, is_completely_full) {
   } else {
     return [false, "uitgeschakeld", Colors.grey, true];
   }
+}
+
+Widget _buildPopupDialog(BuildContext context) {
+  return new AlertDialog(
+    title: const Text('Evenementen'),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("Er zijn geen evenementen in de nabije toekomst. Kom later terug! "),
+      ],
+    ),
+    actions: <Widget>[
+      new FlatButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        textColor: Theme.of(context).primaryColor,
+        child: const Text('Terug'),
+      ),
+    ],
+  );
 }

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'festivals.dart';
+import 'notification.dart';
 import 'user.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'login.dart';
+import 'Api.dart';
+
+ApiService api = new ApiService();
 
 class UserMenu extends StatefulWidget {
   @override
@@ -13,17 +18,19 @@ class userPageMenu extends State<UserMenu> {
   Widget build(BuildContext context) {
 
     _launchURL(url) async {
-      if (await canLaunch(url)) {
+      try {
         await launch(url);
-      } else {
-        throw 'Could not launch $url';
       }
+      on Exception catch(Exception){
+        print("failed to open");
+      }
+
     }
 
     String dropdownValue = 'Man';
     return Scaffold(
       appBar: AppBar(
-        title: Text("Menu"),
+        title: Text("All Round Events"),
       ),
       body: Stack(children: <Widget>[
         new Container(
@@ -35,6 +42,25 @@ class userPageMenu extends State<UserMenu> {
         SingleChildScrollView(
           child: Center(
             child: Column(children: [
+              Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width * 0.90,
+                decoration: BoxDecoration(
+                    color: Colors.lightGreen,
+                    borderRadius: BorderRadius.circular(20)),
+                margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                child: FlatButton(
+                  onPressed: () {
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => notificationsDemo()));
+                  },
+                  child: Text(
+                    'Berichten',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                ),
+              ),
               Container(
                 height: 50,
                 width: MediaQuery.of(context).size.width * 0.90,
@@ -63,9 +89,7 @@ class userPageMenu extends State<UserMenu> {
                 margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                 child: FlatButton(
                   onPressed: () {
-
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => UserDemo()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UserDemo()));
                   },
                   child: Text(
                     'Uw gegevens',
@@ -114,10 +138,10 @@ class userPageMenu extends State<UserMenu> {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(20)),
                 margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-
+                    api.logout();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginDemo()));
                   },
                   child: Text(
                     'Afmelden',
@@ -125,13 +149,8 @@ class userPageMenu extends State<UserMenu> {
                   ),
                 ),
               ),
-
-
-
-
             ])))
       ]),
     );
   }
 }
-

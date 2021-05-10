@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'login.dart';
 
 class ApiService {
   // set up POST request arguments
@@ -127,6 +130,14 @@ class ApiService {
     int statusCode = response.statusCode;
     if (statusCode == 200) {
       final body = await response.transform(utf8.decoder).join();
+      try {
+        if (jsonDecode(body).length == 0) {
+          return [];
+        }
+      }
+      catch(e){
+
+      }
       var json_respone = jsonDecode(body);
       return json_respone;
     } else {
@@ -148,6 +159,14 @@ class ApiService {
     int statusCode = response.statusCode;
     if (statusCode == 200) {
       final body = await response.transform(utf8.decoder).join();
+      try {
+        if (jsonDecode(body).length == 0) {
+          return [];
+        }
+      }
+      catch(e){
+
+      }
       var json_respone = jsonDecode(body);
       return json_respone;
     } else {}
@@ -166,6 +185,14 @@ class ApiService {
     int statusCode = response.statusCode;
     if (statusCode == 200) {
       final body = await response.transform(utf8.decoder).join();
+      try {
+        if (jsonDecode(body).length == 0) {
+          return [];
+        }
+      }
+      catch(e){
+
+      }
       var json_respone = jsonDecode(body);
       return json_respone;
       print(json_respone);
@@ -219,6 +246,19 @@ class ApiService {
     }
   }
 
+  Future<void> logout() async {
+    // write from secure storage
+    String id = await storage.read(key: "id");
+    String hash = await storage.read(key: "hash");
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=logout');
+    Object json = {"id": id, "hash": hash, "Id_Users": id};
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    request.write(jsonEncode(json));
+    final response = await request.close();
+
+  }
+
   Future<bool> user_unsubscribe(shift) async {
     // write from secure storage
     String id = await storage.read(key: "id");
@@ -238,6 +278,36 @@ class ApiService {
     }
   }
 
+  Future<List> get_news() async {
+    // write from secure storage
+    String id = await storage.read(key: "id");
+    String hash = await storage.read(key: "hash");
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_news');
+    Object json = {"id": id, "hash": hash};
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    request.write(jsonEncode(json));
+    final response = await request.close();
+    int statusCode = response.statusCode;
+    if (statusCode == 200) {
+      final body = await response.transform(utf8.decoder).join();
+      print(body);
+      try {
+        if (jsonDecode(body)["status"] == 200) {
+          return [];
+        }
+      }
+      catch(e){
+
+      }
+      List json_respone = jsonDecode(body);
+      return json_respone;
+
+    } else {
+      return [];
+    }
+  }
+
 
   Future<dynamic> pushUser_info(Map userData) async {
     // write from secure storage
@@ -253,13 +323,13 @@ class ApiService {
       "Gender": userData["gender"],
       "adres_line_one": userData["address"],
       "adres_line_two": userData["bankNr"],
+      "size": userData["size"],
       "driver_license": userData["socialNR"],
       "nationality": userData["country"],
       "telephone": userData["phone"],
       "marital_state": "0",
       "text": userData["text"]
     };
-
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(jsonEncode(json));
