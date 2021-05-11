@@ -31,7 +31,6 @@ class ApiService {
         } else {
           return false;
         }
-
       } else {
         // credentials found on device but they are not valid, log ins needed
         return false;
@@ -75,7 +74,7 @@ class ApiService {
     request.write(json);
     final response = await request.close();
     int statusCode = response.statusCode;
-    if(statusCode != 200) {
+    if (statusCode != 200) {
       print("error");
     }
   }
@@ -134,10 +133,7 @@ class ApiService {
         if (jsonDecode(body).length == 0) {
           return [];
         }
-      }
-      catch(e){
-
-      }
+      } catch (e) {}
       var json_respone = jsonDecode(body);
       return json_respone;
     } else {
@@ -163,10 +159,7 @@ class ApiService {
         if (jsonDecode(body).length == 0) {
           return [];
         }
-      }
-      catch(e){
-
-      }
+      } catch (e) {}
       var json_respone = jsonDecode(body);
       return json_respone;
     } else {}
@@ -189,10 +182,7 @@ class ApiService {
         if (jsonDecode(body).length == 0) {
           return [];
         }
-      }
-      catch(e){
-
-      }
+      } catch (e) {}
       var json_respone = jsonDecode(body);
       return json_respone;
       print(json_respone);
@@ -214,7 +204,7 @@ class ApiService {
     int statusCode = response.statusCode;
     if (statusCode == 200) {
       final body = await response.transform(utf8.decoder).join();
-      if(jsonDecode(body).length < 1){
+      if (jsonDecode(body).length < 1) {
         return [];
       }
       List json_respone = jsonDecode(body);
@@ -240,7 +230,6 @@ class ApiService {
       final body = await response.transform(utf8.decoder).join();
       print(body);
       return true;
-
     } else {
       return false;
     }
@@ -256,7 +245,6 @@ class ApiService {
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(jsonEncode(json));
     final response = await request.close();
-
   }
 
   Future<bool> user_unsubscribe(shift) async {
@@ -272,7 +260,6 @@ class ApiService {
     int statusCode = response.statusCode;
     if (statusCode == 200) {
       return true;
-
     } else {
       return false;
     }
@@ -293,21 +280,17 @@ class ApiService {
       final body = await response.transform(utf8.decoder).join();
       print(body);
       try {
-        if (jsonDecode(body)["status"] == 200) {
+        if (jsonDecode(body)["status"] == 200) {}
+        if (jsonDecode(body)["status"] == 409) {
           return [];
         }
-      }
-      catch(e){
-
-      }
+      } catch (e) {}
       List json_respone = jsonDecode(body);
       return json_respone;
-
     } else {
       return [];
     }
   }
-
 
   Future<dynamic> pushUser_info(Map userData) async {
     // write from secure storage

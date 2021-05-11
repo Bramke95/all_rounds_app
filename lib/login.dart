@@ -37,8 +37,7 @@ class _LoginDemoState extends State<LoginDemo> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/background.jpg"), fit: BoxFit.cover),
+          image: DecorationImage(image: AssetImage("assets/background.jpg"), fit: BoxFit.cover),
         ),
         child: Column(
           children: <Widget>[
@@ -67,64 +66,45 @@ class _LoginDemoState extends State<LoginDemo> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 controller: myPass_controller,
                 obscureText: true,
                 decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(),
-                    labelText: 'Wachtwoord',
-                    labelStyle: TextStyle(color: Colors.black),
-                    hintText: ''),
+                    fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'Wachtwoord', labelStyle: TextStyle(color: Colors.black), hintText: ''),
               ),
             ),
             Container(
               height: 25,
               width: MediaQuery.of(context).size.width * 0.45,
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-              decoration: BoxDecoration(
-                  color: Colors.lightGreen,
-                  borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: Colors.lightGreen, borderRadius: BorderRadius.circular(10)),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => passforgetDemo()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => passforgetDemo()));
                 },
-                child: Text('Wachtwoord vergeten?',
-                    style: TextStyle(
-                        backgroundColor: Colors.lightGreen,
-                        color: Colors.red,
-                        fontSize: 10)
-                ),
+                child: Text('Wachtwoord vergeten?', style: TextStyle(backgroundColor: Colors.lightGreen, color: Colors.red, fontSize: 10)),
               ),
             ),
             Container(
               height: 50,
               width: MediaQuery.of(context).size.width * 0.80,
-              decoration: BoxDecoration(
-                  color: Colors.lightGreen,
-                  borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(color: Colors.lightGreen, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 onPressed: () {
                   setState(() {
                     error_text = "";
                   });
                   ApiService login = new ApiService();
-                  login.ApiLogin(
-                          [myUser_controller.text, myPass_controller.text])
-                      .then((List res) {
+                  login.ApiLogin([myUser_controller.text, myPass_controller.text]).then((List res) {
                     if (res[0] == "") {
                       setState(() {
                         error_text = res[1];
                       });
                     } else {
                       // token is set, move to other page
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => UserMenu()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => UserMenu()));
                     }
                   });
                 },
@@ -138,12 +118,10 @@ class _LoginDemoState extends State<LoginDemo> {
               height: 50,
               width: MediaQuery.of(context).size.width * 0.80,
               margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              decoration: BoxDecoration(
-                  color: Colors.black, borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => UserInitDemo()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserInitDemo()));
                 },
                 child: Text(
                   'Registeren',

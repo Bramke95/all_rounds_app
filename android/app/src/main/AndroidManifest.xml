@@ -2,10 +2,13 @@
     package="com.rounds.all_round_events">
     <uses-permission android:name="android.permission.INTERNET"/>
 
+
    <application
+
 
         android:label="all_round_events"
         android:icon="@mipmap/ic_launcher">
+
        <activity
             android:name="com.rounds.all_round_events.MainActivity"
             android:launchMode="singleTop"

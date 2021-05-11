@@ -46,11 +46,7 @@ class userPage extends State<UserDemo> {
     }
     DateTime selectedDate = DateTime.utc(2000, 1, 1);
     Future<void> _selectDate(BuildContext context) async {
-      final DateTime picked = await showDatePicker(
-          context: context,
-          initialDate: selectedDate,
-          firstDate: DateTime(1920, 8),
-          lastDate: DateTime(2010));
+      final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(1920, 8), lastDate: DateTime(2010));
       if (picked != null && picked != selectedDate)
         setState(() {
           selectedDate = picked;
@@ -65,87 +61,52 @@ class userPage extends State<UserDemo> {
       ),
       body: Stack(children: <Widget>[
         new Container(
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-                  image: AssetImage("assets/background.jpg"),
-                  fit: BoxFit.cover)),
+          decoration: new BoxDecoration(image: new DecorationImage(image: AssetImage("assets/background.jpg"), fit: BoxFit.cover)),
         ),
         SingleChildScrollView(
             child: Column(children: [
-
           Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextField(
               controller: myName_controller,
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: 'Naam',
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: ''),
+              decoration:
+                  InputDecoration(fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'Naam', labelStyle: TextStyle(color: Colors.black), hintText: ''),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextField(
               controller: myaddres_controller,
               decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: 'Adres',
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: ''),
+                  fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'Adres', labelStyle: TextStyle(color: Colors.black), hintText: ''),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextField(
               controller: myrekening_controller,
               decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: 'Rekening nr',
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: ''),
+                  fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'Rekening nr', labelStyle: TextStyle(color: Colors.black), hintText: ''),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextField(
               controller: mytelephone_controller,
               decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: 'Gsm nr',
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: ''),
+                  fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'Gsm nr', labelStyle: TextStyle(color: Colors.black), hintText: ''),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextField(
               controller: myNathionality_controller,
               decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: 'nationaliteit',
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: ''),
+                  fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'nationaliteit', labelStyle: TextStyle(color: Colors.black), hintText: ''),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextField(
               controller: date_controller,
               readOnly: true,
@@ -153,28 +114,18 @@ class userPage extends State<UserDemo> {
                 _selectDate(context);
               },
               decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: 'Geboortedatum',
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: ''),
+                  fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'Geboortedatum', labelStyle: TextStyle(color: Colors.black), hintText: ''),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: InputDecorator(
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
-                errorStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    backgroundColor: Colors.white),
+                errorStyle: TextStyle(color: Colors.black, fontSize: 16.0, backgroundColor: Colors.white),
                 hintText: 'aub selecteer geslacht',
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
               ),
               isEmpty: false,
               child: DropdownButtonHideUnderline(
@@ -196,75 +147,56 @@ class userPage extends State<UserDemo> {
               ),
             ),
           ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 0),
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    errorStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        backgroundColor: Colors.white),
-                    hintText: 'T shift maat',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  ),
-                  isEmpty: false,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: size,
-                      isDense: true,
-                      onChanged: (String newValue) {
-                        setState(() {
-                          size = newValue;
-                        });
-                      },
-                      items: ["XXS", "XS","S", "M","L", "XL", "XXL"].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+            child: InputDecorator(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                errorStyle: TextStyle(color: Colors.black, fontSize: 16.0, backgroundColor: Colors.white),
+                hintText: 'T shift maat',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+              ),
+              isEmpty: false,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: size,
+                  isDense: true,
+                  onChanged: (String newValue) {
+                    setState(() {
+                      size = newValue;
+                    });
+                  },
+                  items: ["XXS", "XS", "S", "M", "L", "XL", "XXL"].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                 ),
               ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
-            child: TextField(
-              controller: mysocialNR_controller,
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: 'Rijksregister nr',
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: ''),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+            child: TextField(
+              controller: mysocialNR_controller,
+              decoration: InputDecoration(
+                  fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'Rijksregister nr', labelStyle: TextStyle(color: Colors.black), hintText: ''),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextField(
               controller: mytext_controller,
               decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: 'Persoonlijke text',
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: ''),
+                  fillColor: Colors.white, filled: true, border: OutlineInputBorder(), labelText: 'Persoonlijke text', labelStyle: TextStyle(color: Colors.black), hintText: ''),
             ),
           ),
           Container(
             height: 50,
             width: MediaQuery.of(context).size.width * 0.80,
-            decoration: BoxDecoration(
-                color: Colors.lightGreen,
-                borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(color: Colors.lightGreen, borderRadius: BorderRadius.circular(20)),
             margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
             child: FlatButton(
               onPressed: () {

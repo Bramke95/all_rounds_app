@@ -14,33 +14,29 @@ class notificationsDemo extends StatefulWidget {
   notifications createState() => notifications();
 }
 
-void back(context) {
-  timer.cancel();
-  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMenu()));
-  isSet = false;
-}
-
-
 class notifications extends State<notificationsDemo> {
+  Future<bool> _onWillPop() async {
+    isSet = false;
+    timer.cancel();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => UserMenu()));
+  }
+
   @override
   Widget build(BuildContext context) {
     void update() {
-      api.get_news().then((value) =>
-      {
-        setState(() {
-          notifications_list = value.reversed.toList();
-          if (notifications_list.length < 1) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => _buildPopupDialog(context),
-            ).then((value) =>
-            {
-              back(context)
-            });
-          }
-        })
-      });
+      api.get_news().then((value) => {
+            setState(() {
+              notifications_list = value;
+              if (notifications_list.length < 1) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => _buildPopupDialog(context),
+                ).then((value) => {_onWillPop()});
+              }
+            })
+          });
     }
+
     if (!isSet) {
       update();
       timer = new Timer(new Duration(seconds: 60), () {
@@ -50,56 +46,45 @@ class notifications extends State<notificationsDemo> {
     }
 
     return WillPopScope(
-        onWillPop: () {
-          print('Backbutton pressed (device or appbar button), do whatever you want.');
-
-          //trigger leaving and use own data
-          Navigator.pop(context, false);
-          timer.cancel();
-          isSet = false;
-          //we need to return a future
-          return Future.value(false);
-        },
+        onWillPop: _onWillPop,
         child: Scaffold(
           appBar: AppBar(
             title: Text("Berichten"),
           ),
-          body: Stack(children: <Widget>[
+          body: Stack(children: [
             new Container(
               decoration: new BoxDecoration(image: new DecorationImage(image: AssetImage("assets/background.jpg"), fit: BoxFit.cover)),
             ),
             SingleChildScrollView(
                 child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: notifications_list.length,
-                  itemBuilder: (BuildContext context, int x) {
-                    return Container(
-                        margin: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 8),
-                        child: Column(children: [
-                          CustomPaint(
-                              painter: CustomChatBubble(isOwn: false),
-                              child: Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Column(children: [
-                                    Html(data: notifications_list[x]["notification"]),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-
-                                      child: Text(
-                                        notifications_list[x]["data"],
-                                        textAlign: TextAlign.right,
-
-                                        style: TextStyle(color: Colors.black, fontSize: 15,),
-                                      ),
-                                    )
-                                  ])))
-
-                        ]));
-                  },
-                )
-
-            )
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: notifications_list.length,
+              itemBuilder: (BuildContext context, int x) {
+                return Container(
+                    margin: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 8),
+                    child: Column(children: [
+                      CustomPaint(
+                          painter: CustomChatBubble(isOwn: false),
+                          child: Container(
+                              padding: EdgeInsets.all(8),
+                              child: Column(children: [
+                                Html(data: notifications_list[x]["notification"]),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    notifications_list[x]["data"],
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                )
+                              ])))
+                    ]));
+              },
+            ))
           ]),
         ));
   }
@@ -126,16 +111,13 @@ class CustomChatBubble extends CustomPainter {
       if (isOwn) {
         path = Path()
           ..moveTo(size.width - 6, size.height - 4)
-          ..quadraticBezierTo(
-              size.width + 5, size.height, size.width + 16, size.height - 4)
-          ..quadraticBezierTo(
-              size.width + 5, size.height - 5, size.width, size.height - 17);
+          ..quadraticBezierTo(size.width + 5, size.height, size.width + 16, size.height - 4)
+          ..quadraticBezierTo(size.width + 5, size.height - 5, size.width, size.height - 17);
       }
       return path;
     }
 
-    final RRect bubbleBody = RRect.fromRectAndRadius(
-        Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(16));
+    final RRect bubbleBody = RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(16));
     final Path bubbleTail = paintBubbleTail();
 
     canvas.drawRRect(bubbleBody, paint);
@@ -148,7 +130,6 @@ class CustomChatBubble extends CustomPainter {
     return true;
   }
 }
-
 
 Widget _buildPopupDialog(BuildContext context) {
   return new AlertDialog(
@@ -171,6 +152,3 @@ Widget _buildPopupDialog(BuildContext context) {
     ],
   );
 }
-
-
-
