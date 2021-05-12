@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'festivals.dart';
 import 'notification.dart';
 import 'user.dart';
+import 'picture.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'login.dart';
 import 'Api.dart';
@@ -114,7 +115,21 @@ class userPageMenu extends State<UserMenu> {
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 ),
-              ),
+              ), Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * 0.90,
+                        decoration: BoxDecoration(color: Colors.lightGreen, borderRadius: BorderRadius.circular(20)),
+                        margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => imgDemo()));
+                          },
+                          child: Text(
+                            'Afbeeldingen',
+                            style: TextStyle(color: Colors.white, fontSize: 25),
+                          ),
+                        ),
+                      ),
               Container(
                 height: 50,
                 width: MediaQuery.of(context).size.width * 0.90,

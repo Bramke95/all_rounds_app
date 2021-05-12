@@ -27,6 +27,8 @@ dependencies:
   flutter_html: ^0.8.2
   cron: ^0.3.0
   awesome_notifications: ^0.0.6+5
+  image_picker: ^0.7.5
+  dio: ^4.0.0
 
   flutter:
     sdk: flutter

@@ -191,6 +191,33 @@ class ApiService {
     }
   }
 
+  Future<List> get_images() async {
+    // write from secure storage
+    String id = await storage.read(key: "id");
+    String hash = await storage.read(key: "hash");
+    Uri url = Uri.parse('https://www.all-round-events.be/api.php?action=get_pictures');
+    String json = '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    request.write(json);
+    final response = await request.close();
+    int statusCode = response.statusCode;
+    if (statusCode == 200) {
+      final body = await response.transform(utf8.decoder).join();
+      try {
+        if (jsonDecode(body).length == 0) {
+          return [];
+        }
+      } catch (e) {}
+      var json_respone = jsonDecode(body);
+      return json_respone;
+      print(json_respone);
+    } else {
+      return [];
+    }
+  }
+
+
   Future<List> GetShiftWorkDays() async {
     // write from secure storage
     String id = await storage.read(key: "id");

@@ -10,12 +10,15 @@ final storage = new FlutterSecureStorage();
 int last_news_id = 0;
 
 Future<void> check_updates() async {
-  try {} catch (w) {}
 
-  api.get_news().then((news_data) => {possibly_notify(news_data)});
+  api.get_news().then((news_data) => {
+    possibly_notify(news_data)}
+    );
 }
 
-void possibly_notify(news_data) {
+void possibly_notify(news_data) async{
+  String last_news_string = await storage.read(key: "news");
+  int last_news_id = int.parse(last_news_string);
   if (news_data.length == 0) {
     return;
   }
@@ -23,11 +26,11 @@ void possibly_notify(news_data) {
   int current = 0;
   try {
     current = int.parse(news_data[0]["id"]);
-
     storage.write(key: "news", value: current.toString());
   } catch (e) {}
   if (last_news_id < current) {
     AwesomeNotifications().createNotification(content: NotificationContent(id: 10, channelKey: 'basic_channel', title: 'Nieuwe bericht', body: notification));
+
   } else {
     print("no new notifications, print nothing");
   }

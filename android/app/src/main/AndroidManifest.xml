@@ -6,7 +6,7 @@
    <application
 
 
-        android:label="all_round_events"
+        android:label="all-roundevents"
         android:icon="@mipmap/ic_launcher">
 
        <activity
