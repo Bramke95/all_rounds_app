@@ -18,7 +18,8 @@ class notifications extends State<notificationsDemo> {
   Future<bool> _onWillPop() async {
     isSet = false;
     timer.cancel();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => UserMenu()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => UserMenu()));
   }
 
   @override
@@ -53,7 +54,10 @@ class notifications extends State<notificationsDemo> {
           ),
           body: Stack(children: [
             new Container(
-              decoration: new BoxDecoration(image: new DecorationImage(image: AssetImage("assets/background.jpg"), fit: BoxFit.cover)),
+              decoration: new BoxDecoration(
+                  image: new DecorationImage(
+                      image: AssetImage("assets/background.jpg"),
+                      fit: BoxFit.cover)),
             ),
             SingleChildScrollView(
                 child: ListView.builder(
@@ -62,14 +66,17 @@ class notifications extends State<notificationsDemo> {
               itemCount: notifications_list.length,
               itemBuilder: (BuildContext context, int x) {
                 return Container(
-                    margin: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 8),
+                    margin: const EdgeInsets.only(
+                        left: 12, right: 12, top: 8, bottom: 8),
                     child: Column(children: [
                       CustomPaint(
                           painter: CustomChatBubble(isOwn: false),
                           child: Container(
                               padding: EdgeInsets.all(8),
                               child: Column(children: [
-                                Html(data: notifications_list[x]["notification"]),
+                                Html(
+                                    data: notifications_list[x]
+                                        ["notification"]),
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
@@ -111,13 +118,16 @@ class CustomChatBubble extends CustomPainter {
       if (isOwn) {
         path = Path()
           ..moveTo(size.width - 6, size.height - 4)
-          ..quadraticBezierTo(size.width + 5, size.height, size.width + 16, size.height - 4)
-          ..quadraticBezierTo(size.width + 5, size.height - 5, size.width, size.height - 17);
+          ..quadraticBezierTo(
+              size.width + 5, size.height, size.width + 16, size.height - 4)
+          ..quadraticBezierTo(
+              size.width + 5, size.height - 5, size.width, size.height - 17);
       }
       return path;
     }
 
-    final RRect bubbleBody = RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(16));
+    final RRect bubbleBody = RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(16));
     final Path bubbleTail = paintBubbleTail();
 
     canvas.drawRRect(bubbleBody, paint);

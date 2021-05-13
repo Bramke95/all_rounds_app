@@ -18,6 +18,13 @@ Future<void> check_updates() async {
 
 void possibly_notify(news_data) async{
   String last_news_string = await storage.read(key: "news");
+  if (news_data.length < 1) {
+    return;
+  }
+  if(last_news_string == null){
+    storage.write(key: "news", value: 0.toString());
+    return;
+  }
   int last_news_id = int.parse(last_news_string);
   if (news_data.length == 0) {
     return;
