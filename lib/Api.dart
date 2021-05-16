@@ -123,6 +123,11 @@ class ApiService {
     int statusCode = response.statusCode;
     if (statusCode == 200) {
       final body = await response.transform(utf8.decoder).join();
+      try {
+        if (jsonDecode(body)["error_type"] == 4) {
+          return ["restart"];
+        }
+      } catch (e) {}
       var json_respone = jsonDecode(body);
       return json_respone;
     } else {}
@@ -177,6 +182,11 @@ class ApiService {
           return [];
         }
       } catch (e) {}
+      try {
+        if (jsonDecode(body)["error_type"] == 4) {
+          return ["restart"];
+        }
+      } catch (e) {}
       var json_respone = jsonDecode(body);
       return json_respone;
     } else {}
@@ -200,6 +210,11 @@ class ApiService {
       try {
         if (jsonDecode(body).length == 0) {
           return [];
+        }
+      } catch (e) {}
+      try {
+        if (jsonDecode(body)["error_type"] == 4) {
+          return ["restart"];
         }
       } catch (e) {}
       var json_respone = jsonDecode(body);
@@ -259,12 +274,24 @@ class ApiService {
       if (jsonDecode(body).length < 1) {
         return [];
       }
-      if (jsonDecode(body)["error_type"] == 8) {
-        return ["picture"];
+      try {
+        if (jsonDecode(body)["error_type"] == 8) {
+          return ["picture"];
+        }
       }
-      if (jsonDecode(body)["status"] == 200) {
-        return [];
+      catch(r){}
+      try {
+        if (jsonDecode(body)["status"] == 200) {
+          return [];
+        }
       }
+      catch(r){}
+      try {
+        if (jsonDecode(body)["error_type"] == 4) {
+          return ["restart"];
+        }
+      } catch (e) {}
+      catch(e){}
       List json_respone = jsonDecode(body);
       return json_respone;
     } else {
@@ -355,6 +382,11 @@ class ApiService {
       final body = await response.transform(utf8.decoder).join();
       print(body);
       try {
+        if (jsonDecode(body)["error_type"] == 4) {
+          return ["restart"];
+        }
+      } catch (e) {}
+      try {
         if (jsonDecode(body)["status"] == 200) {
           return [];
         }
@@ -362,6 +394,7 @@ class ApiService {
           return [];
         }
       } catch (e) {}
+
       List json_respone = jsonDecode(body);
       return json_respone;
     } else {

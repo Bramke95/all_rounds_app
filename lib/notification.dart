@@ -3,6 +3,7 @@ import 'mainMenu.dart';
 import 'package:flutter/material.dart';
 import 'Api.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'login.dart';
 
 List notifications_list = [];
 Timer timer;
@@ -28,6 +29,15 @@ class notifications extends State<notificationsDemo> {
       api.get_news().then((value) => {
             setState(() {
               notifications_list = value;
+              try {
+                if (notifications_list[0] == "restart") {
+                  notifications_list = [];
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _buildPopupDialog2(context),
+                  ).then((value) => {_onWillPop()});
+                }
+              } catch (e) {}
               if (notifications_list.length < 1) {
                 showDialog(
                   context: context,
@@ -149,6 +159,28 @@ Widget _buildPopupDialog(BuildContext context) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text("Er zijn geen berichten op dit moment, kom later een keer terug!"),
+      ],
+    ),
+    actions: <Widget>[
+      new FlatButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        textColor: Theme.of(context).primaryColor,
+        child: const Text('Terug'),
+      ),
+    ],
+  );
+}
+
+Widget _buildPopupDialog2(BuildContext context) {
+  return new AlertDialog(
+    title: const Text('Berichten'),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("Je bent niet meer ingelogd. "),
       ],
     ),
     actions: <Widget>[

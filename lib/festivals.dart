@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:all_round_events/login.dart';
+
 import 'mainMenu.dart';
 import 'package:flutter/material.dart';
 import 'Api.dart';
@@ -48,8 +50,16 @@ class userInit extends State<festivalDemo> {
                                 shiftDays = value3;
                                 workDays = value4;
                                 try {
+                                  if (shifts[0] == "restart") {
+                                    timer.cancel();
+                                    isSet = false;
+                                    Navigator.push(
+                                        context, MaterialPageRoute(builder: (context) => LoginDemo()));
+                                  }
+                                } catch (e) {}
+                                try {
                                   if (workDays[0] == "picture") {
-                                    // no valid picture
+                                    // token is invalid
                                     workDays = [];
 
                                     showDialog(
@@ -154,8 +164,6 @@ class userInit extends State<festivalDemo> {
                           ),
                           Center(
                             child: Text(
-                              festivals[blockIdx]["date"].toString() +
-                                  " " +
                                   festivals[blockIdx]["details"].toString(),
                               style:
                                   TextStyle(color: Colors.black, fontSize: 15),
@@ -211,16 +219,15 @@ class userInit extends State<festivalDemo> {
                             margin: const EdgeInsets.only(
                                 left: 10, right: 10, top: 0, bottom: 0),
                             child: Column(children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
+                              Center(
                                 child: Text(
                                   shift_text,
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 25),
+                                      color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Container(
-                                height: 50,
+                                height: 60,
                                 width: MediaQuery.of(context).size.width * 0.95,
                                 decoration: BoxDecoration(
                                     color: button[2],

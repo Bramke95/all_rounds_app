@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Api.dart';
+import 'login.dart';
 
 String user_name = "";
 final myName_controller = TextEditingController();
@@ -26,6 +27,10 @@ class userPage extends State<UserDemo> {
       ApiService api = new ApiService();
       api.getUser_info().then((user) {
         print(user);
+        if(user[0] == "restart"){
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LoginDemo()));
+        }
         setState(() {
           user_name = user["name"];
           myName_controller.text = user["name"];
