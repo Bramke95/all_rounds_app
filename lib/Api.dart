@@ -141,7 +141,7 @@ class ApiService {
     Uri url = Uri.parse(
         'https://www.all-round-events.be/api.php?action=get_festivals');
     String json =
-        '{"id": "' + id.toString() + '", "hash": "' + hash.toString() + '"}';
+        '{"id": "' + id.toString() + '", "hash": "' + hash.toString()  + '", "select": "active"}';
     final request = await client.postUrl(url);
     request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
     request.write(json);
@@ -402,6 +402,85 @@ class ApiService {
     }
   }
 
+  Future<List> get_location_by_shift_id(shift) async {
+    // write from secure storage
+    String id = await storage.read(key: "id");
+    String hash = await storage.read(key: "hash");
+    Uri url = Uri.parse('https://all-round-events.be/api.php?action=get_locations_by_shift');
+    Object json = {"id": id, "hash": hash, "shift_id": shift};
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    request.write(jsonEncode(json));
+    final response = await request.close();
+    int statusCode = response.statusCode;
+    if (statusCode == 200) {
+      final body = await response.transform(utf8.decoder).join();
+      print(body);
+      try {
+        if (jsonDecode(body)["error_type"] == 4) {
+          return ["restart"];
+        }
+      } catch (e) {}
+      try {
+        if (jsonDecode(body)["status"] == 200) {
+          return [];
+        }
+        if (jsonDecode(body)["status"] == 409) {
+          return [];
+        }
+      } catch (e) {}
+
+      List json_respone = jsonDecode(body);
+      return json_respone;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List>get_external_meeting() async {
+    // write from secure storage
+    String id = await storage.read(key: "id");
+    String hash = await storage.read(key: "hash");
+    Uri url = Uri.parse('https://all-round-events.be/api.php?action=subscribe_external_location_user');
+    Object json = {"id": id, "hash": hash};
+    final request = await client.postUrl(url);
+    request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+    request.write(jsonEncode(json));
+    final response = await request.close();
+    int statusCode = response.statusCode;
+    List json_respone = [];
+    if (statusCode == 200) {
+      final body = await response.transform(utf8.decoder).join();
+      print(body);
+      try {
+        if (jsonDecode(body)["error_type"] == 4) {
+          return ["restart"];
+        }
+      } catch (e) {}
+      try {
+        if (jsonDecode(body)["status"] == 200) {
+          return [];
+        }
+        if (jsonDecode(body)["status"] == 409) {
+          return [];
+        }
+
+
+      } catch (e) {}
+      try{
+        json_respone = jsonDecode(body);
+      }
+      catch (e) {
+        return [];
+      }
+
+      return json_respone;
+    } else {
+      return [];
+    }
+  }
+
+
   Future<dynamic> pushUser_info(Map userData) async {
     // write from secure storage
     String id = await storage.read(key: "id");
@@ -421,6 +500,7 @@ class ApiService {
       "driver_license": userData["socialNR"],
       "nationality": userData["country"],
       "telephone": userData["phone"],
+      "employment": userData["employment"],
       "marital_state": "0",
       "text": userData["text"]
     };

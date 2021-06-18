@@ -14,6 +14,7 @@ final mysocialNR_controller = TextEditingController();
 bool isSet = false;
 String gender = "Man";
 String size = "M";
+String work = "Bediende";
 
 class UserDemo extends StatefulWidget {
   @override
@@ -44,6 +45,19 @@ class userPage extends State<UserDemo> {
             String gender = "Vrouw";
           }
           size = user["size"];
+
+          if(user["employment"] == 0){
+            work = "Student";
+          }
+          else if (user["employment"] == 1){
+            work = "Bediende";
+          }
+          else if (user["employment"] == 2){
+            work = "Werkloos";
+          }
+          else if (user["employment"] == 3){
+            work = "Andere";
+          }
 
           isSet = true;
         });
@@ -152,6 +166,36 @@ class userPage extends State<UserDemo> {
               ),
             ),
           ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorStyle: TextStyle(color: Colors.black, fontSize: 16.0, backgroundColor: Colors.white),
+                    hintText: 'tewerkstelling',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: work,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        setState(() {
+                          work = newValue;
+                        });
+                      },
+                      items: ["Student", "Bediende", "Werkloos", "andere"].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
           Padding(
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: InputDecorator(
@@ -207,8 +251,22 @@ class userPage extends State<UserDemo> {
               onPressed: () {
                 ApiService api = new ApiService();
                 String gender_int = "0";
+                String work_int = "0";
                 if (gender == "Vrouw") {
                   gender_int = "1";
+                }
+
+                if (work == "Student") {
+                  work_int = "0";
+                }
+                if (work == "Bediende") {
+                  work_int = "1";
+                }
+                if (work == "Werkloos") {
+                  work_int = "2";
+                }
+                if (work == "andere") {
+                  work_int = "3";
                 }
                 api.pushUser_info({
                   "name": myName_controller.text,
@@ -220,6 +278,7 @@ class userPage extends State<UserDemo> {
                   "gender": gender_int,
                   "size": size,
                   "text": mytext_controller.text,
+                  "employment" : work_int,
                   "socialNR": mysocialNR_controller.text
                 });
                 showDialog(

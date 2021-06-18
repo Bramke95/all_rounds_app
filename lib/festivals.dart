@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:all_round_events/login.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'mainMenu.dart';
 import 'package:flutter/material.dart';
 import 'Api.dart';
 import 'picture.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 List festivals = [];
 List shifts = [];
 List shiftDays = [];
@@ -13,6 +13,7 @@ List workDays = [];
 bool isSet = false;
 ApiService api = new ApiService();
 Timer timer;
+final storage = new FlutterSecureStorage();
 
 class festivalDemo extends StatefulWidget {
   @override
@@ -28,6 +29,14 @@ void back(context) {
 class userInit extends State<festivalDemo> {
   @override
   Widget build(BuildContext context) {
+    _launchURL(url) async {
+      try {
+        await launch(url);
+      } on Exception catch (Exception) {
+        print("failed to open");
+      }
+    }
+
     void update() {
       festivals = [];
       shifts = [];
@@ -263,6 +272,59 @@ class userInit extends State<festivalDemo> {
                                   ),
                                 ),
                               ),
+                              Container(
+                                height: 60,
+                                width: MediaQuery.of(context).size.width * 0.95,
+                                decoration: BoxDecoration(
+                                    color: button[2],
+                                    borderRadius: BorderRadius.circular(20)),
+                                margin: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0),
+                                child: FlatButton(
+                                  onPressed: () {
+                                    var shift_id = festivals[blockIdx]["shifts"][childIdx]["idshifts"];
+                                    storage.read(key: "id").then((ID) => {
+                                      storage.read(key: "hash").then((HASH) => {
+                                      _launchURL("https://all-round-events.be/api.php?action=pdf_unemployment&ID="+ID+"&HASH="+ HASH +"&shift=" + shift_id)
+                                      })
+                                    });
+
+                                  },
+                                  child: Text(
+                                    "Werkloosheidsattest",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 25),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 60,
+                                width: MediaQuery.of(context).size.width * 0.95,
+                                decoration: BoxDecoration(
+                                    color: button[2],
+                                    borderRadius: BorderRadius.circular(20)),
+                                margin: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0),
+                                child: FlatButton(
+                                  onPressed: () {
+                                    api.get_location_by_shift_id(festivals[blockIdx]["shifts"][childIdx]["idshifts"]).then((locations) => {
+                                        api.get_external_meeting().then((external) => {
+                                        showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                        _buildPopupDialog3(context, locations, external),
+                                        ).then((value) => {back(context)})
+                                      })
+                                    });
+
+                                  },
+                                  child: Text(
+                                    "Opvang moment",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 25),
+                                  ),
+                                ),
+                              ),
                               ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -351,6 +413,55 @@ class userInit extends State<festivalDemo> {
           ]),
         ));
   }
+  Widget _buildPopupDialog3(BuildContext context, locations, external) {
+    int test = 4;
+    return new AlertDialog(
+      title: const Text('Evenementen'),
+      content: setupAlertDialoadContainer(locations, external),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  }
+
+  Widget setupAlertDialoadContainer(locations, external) {
+    return Container(
+      height: 300.0, // Change as per your requirement
+      width: 300.0, // Change as per your requirement
+      child:ListView.builder(
+        itemCount: locations.length,
+        itemBuilder: (BuildContext context, int index) {
+          var subscribed = false;
+          for(var x = 0; x < external.length ; x++){
+            if(external[x]["location_id"] == locations[index]["location_id"]){
+              subscribed = true;
+            }
+          }
+          return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Checkbox(
+                  value: subscribed,
+                  onChanged: (newValue) {
+                    setState(() {
+                      // checkbox is changed, this should untag all other checkboxes and push to api
+                    });
+                  },
+                ),
+                Text(
+                    locations[index]["appointment_time"] + "  " +  locations[index]["location"]
+                )]
+          );
+        },
+      ),
+    );
+  }
 }
 
 //0: false= user_desubscribe, true= user subscribe
@@ -381,7 +492,7 @@ List id_to_status(id, is_already_subscribed, is_full, is_completely_full) {
     } else if (is_completely_full) {
       return [
         true,
-        "registeren(hoog aantal inschrijvingen)",
+        "registeren(volzet)",
         Colors.orange,
         false
       ];
@@ -394,7 +505,7 @@ List id_to_status(id, is_already_subscribed, is_full, is_completely_full) {
     } else if (is_completely_full) {
       return [false, "Volzet", Colors.red, true];
     } else if (is_full) {
-      return [true, "volzet(inschrijven op reservelijst)", Colors.red, false];
+      return [true, "Inschrijven(Volzet)", Colors.orange, false];
     } else {
       return [true, "Inschrijven", Colors.green, false];
     }
@@ -448,6 +559,7 @@ Widget _buildPopupDialog(BuildContext context) {
 }
 
 Widget _buildPopupDialog2(BuildContext context) {
+  int test = 4;
   return new AlertDialog(
     title: const Text('Evenementen'),
     content: new Column(
@@ -471,3 +583,6 @@ Widget _buildPopupDialog2(BuildContext context) {
     ],
   );
 }
+
+
+
